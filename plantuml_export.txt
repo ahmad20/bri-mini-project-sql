@@ -1,0 +1,56 @@
+@startuml
+
+!define TABLE_BORDER_COLOR #666666
+!define TABLE_HEADER_COLOR #dddddd
+!define TABLE_ROW_COLOR #ffffff
+
+!define PK_COLOR Orange
+!define FK_COLOR Green
+
+skinparam class {
+    BackgroundColor Transparent
+    BorderColor #000000
+    ArrowColor #000000
+}
+
+package "Database Schema" {
+    entity "actors" as actors {
+        +id [PK] (bigint unsigned)
+        Username (varchar)
+        Password (varchar)
+        RoleId (int unsigned)
+        Verified (enum('true', 'false'))
+        Active (enum('true', 'false'))
+        CreatedAt (timestamp)
+        UpdatedAt (timestamp)
+    }
+
+    entity "customer" as customer {
+        +id [PK] (bigint unsigned)
+        first_name (varchar)
+        last_name (varchar)
+        email (varchar)
+        Avatar (varchar)
+        CreatedAt (timestamp)
+        UpdatedAt (timestamp)
+    }
+
+    entity "role" as role {
+        +id [PK] (int unsigned)
+        roleName (varchar)
+    }
+
+    entity "register_approval" as register_approval {
+        +id [PK] (bigint unsigned)
+        admin_id (bigint unsigned)
+        super_admin_id (bigint unsigned)
+        status (varchar)
+        role_id [FK]
+    }
+
+    actors "1" -- "1" role : RoleId -- id
+    register_approval "1" -- "many" role : admin_id -- id
+    register_approval "1" -- "1" role : super_admin_id -- id
+}
+
+@enduml
